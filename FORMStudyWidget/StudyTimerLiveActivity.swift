@@ -16,33 +16,61 @@ struct StudyTimerLiveActivity: Widget {
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(context.state.isRunning ? .green : .orange)
                 }
-                HStack(spacing: 14) {
-                    Button(intent: ToggleStudyTimerIntent(
-                        subject: context.attributes.subject,
-                        startedAtMilliseconds: context.state.startedAtMilliseconds,
-                        shouldRun: !context.state.isRunning
-                    )) {
-                        Image(systemName: context.state.isRunning ? "pause.fill" : "play.fill")
-                            .font(.system(size: 19, weight: .bold))
-                            .foregroundStyle(.orange)
-                            .frame(width: 54, height: 54)
-                    }
-                    .buttonStyle(.plain)
-                    .modifier(InteractiveCircleGlass(tint: .orange, fallbackOpacity: 0.18))
-                    .accessibilityLabel(context.state.isRunning ? "一時停止" : "再開")
-
-                    Button(intent: SaveStudyTimerIntent(
-                        subject: context.attributes.subject,
-                        startedAtMilliseconds: context.state.startedAtMilliseconds
-                    )) {
-                        Image(systemName: "bookmark.fill")
-                            .font(.system(size: 19, weight: .semibold))
+                HStack(spacing: 10) {
+                    VStack(spacing: 3) {
+                        Button(intent: ToggleStudyTimerIntent(
+                            subject: context.attributes.subject,
+                            startedAtMilliseconds: context.state.startedAtMilliseconds,
+                            shouldRun: !context.state.isRunning
+                        )) {
+                            Image(systemName: context.state.isRunning ? "pause.fill" : "play.fill")
+                                .font(.system(size: 17, weight: .bold))
+                                .foregroundStyle(.orange)
+                                .frame(width: 42, height: 42)
+                        }
+                        .buttonStyle(.plain)
+                        .modifier(InteractiveCircleGlass(tint: .orange, fallbackOpacity: 0.18))
+                        .accessibilityLabel(context.state.isRunning ? "一時停止" : "再開")
+                        Text(context.state.isRunning ? "一時停止" : "再開")
+                            .font(.caption2)
                             .foregroundStyle(.white)
-                            .frame(width: 54, height: 54)
                     }
-                    .buttonStyle(.plain)
-                    .modifier(InteractiveCircleGlass(tint: .white, fallbackOpacity: 0.15))
-                    .accessibilityLabel("記録を保存して終了")
+
+                    VStack(spacing: 3) {
+                        Button(intent: StopStudyTimerIntent(
+                            subject: context.attributes.subject,
+                            startedAtMilliseconds: context.state.startedAtMilliseconds
+                        )) {
+                            Image(systemName: "stop.fill")
+                                .font(.system(size: 15, weight: .bold))
+                                .foregroundStyle(.white)
+                                .frame(width: 42, height: 42)
+                        }
+                        .buttonStyle(.plain)
+                        .modifier(InteractiveCircleGlass(tint: .white, fallbackOpacity: 0.15))
+                        .accessibilityLabel("停止して記録")
+                        Text("停止")
+                            .font(.caption2)
+                            .foregroundStyle(.white)
+                    }
+
+                    VStack(spacing: 3) {
+                        Button(intent: SaveStudyTimerIntent(
+                            subject: context.attributes.subject,
+                            startedAtMilliseconds: context.state.startedAtMilliseconds
+                        )) {
+                            Image(systemName: "bookmark.fill")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .frame(width: 42, height: 42)
+                        }
+                        .buttonStyle(.plain)
+                        .modifier(InteractiveCircleGlass(tint: .white, fallbackOpacity: 0.15))
+                        .accessibilityLabel("記録を保存して終了")
+                        Text("保存")
+                            .font(.caption2)
+                            .foregroundStyle(.white)
+                    }
 
                     Spacer(minLength: 2)
                     timerText(context.state)
@@ -73,7 +101,7 @@ struct StudyTimerLiveActivity: Widget {
                             .monospacedDigit()
                             .font(.system(.title3, design: .rounded, weight: .semibold))
                     }
-                    HStack(spacing: 22) {
+                    HStack(spacing: 10) {
                         Button(intent: ToggleStudyTimerIntent(
                             subject: context.attributes.subject,
                             startedAtMilliseconds: context.state.startedAtMilliseconds,
@@ -83,11 +111,18 @@ struct StudyTimerLiveActivity: Widget {
                                   systemImage: context.state.isRunning ? "pause.fill" : "play.fill")
                                 .modifier(InteractiveCapsuleGlass(tint: .white))
                         }
+                        Button(intent: StopStudyTimerIntent(
+                            subject: context.attributes.subject,
+                            startedAtMilliseconds: context.state.startedAtMilliseconds
+                        )) {
+                            Label("停止", systemImage: "stop.fill")
+                                .modifier(InteractiveCapsuleGlass(tint: .white))
+                        }
                         Button(intent: SaveStudyTimerIntent(
                             subject: context.attributes.subject,
                             startedAtMilliseconds: context.state.startedAtMilliseconds
                         )) {
-                            Label("記録", systemImage: "bookmark.fill")
+                            Label("保存", systemImage: "bookmark.fill")
                                 .modifier(InteractiveCapsuleGlass(tint: .white))
                         }
                     }

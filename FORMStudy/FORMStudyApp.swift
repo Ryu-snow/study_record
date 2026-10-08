@@ -44,6 +44,9 @@ struct FORMStudyApp: App {
                     }
                 }
             }
+            .background {
+                Color.white.ignoresSafeArea()
+            }
             .tint(Color(red: 0.32, green: 0.27, blue: 0.72))
             .onOpenURL { url in
                 guard url.scheme == "studymoney", url.host == "timer" else { return }

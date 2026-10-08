@@ -3,7 +3,7 @@ import AppIntents
 import Foundation
 
 private func studyTimerURL(action: String, subject: String, startedAtMilliseconds: Double,
-                           elapsedSeconds: Double? = nil) -> URL? {
+                           elapsedSeconds: Double? = nil) -> URL {
     var components = URLComponents()
     components.scheme = "studymoney"
     components.host = "timer"
@@ -15,7 +15,7 @@ private func studyTimerURL(action: String, subject: String, startedAtMillisecond
     if let elapsedSeconds {
         components.queryItems?.append(URLQueryItem(name: "elapsedSeconds", value: String(elapsedSeconds)))
     }
-    return components.url
+    return components.url ?? URL(string: "https://study-form-ryu.ryukawasaki1023.chatgpt.site")!
 }
 
 @MainActor
@@ -36,11 +36,14 @@ struct ToggleStudyTimerIntent: AppIntent {
     }
 
     func perform() async throws -> some IntentResult {
+        let url = studyTimerURL(action: shouldRun ? "resume" : "pause",
+                                subject: subject,
+                                startedAtMilliseconds: startedAtMilliseconds)
         guard let activity = Activity<StudyTimerAttributes>.activities.first(where: {
             $0.attributes.subject == subject &&
             abs($0.content.state.startedAtMilliseconds - startedAtMilliseconds) < 1
         }) else {
-            return .result()
+            return .result(opensIntent: OpenURLIntent(url))
         }
 
         var state = activity.content.state
@@ -53,12 +56,6 @@ struct ToggleStudyTimerIntent: AppIntent {
             state.resumedAtMilliseconds = nil
         }
         await activity.update(ActivityContent(state: state, staleDate: nil))
-
-        guard let url = studyTimerURL(action: shouldRun ? "resume" : "pause",
-                                      subject: subject,
-                                      startedAtMilliseconds: startedAtMilliseconds) else {
-            return .result()
-        }
         return .result(opensIntent: OpenURLIntent(url))
     }
 }
@@ -79,21 +76,18 @@ struct SaveStudyTimerIntent: AppIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        guard let activity = Activity<StudyTimerAttributes>.activities.first(where: {
+        let activity = Activity<StudyTimerAttributes>.activities.first(where: {
             $0.attributes.subject == subject &&
             abs($0.content.state.startedAtMilliseconds - startedAtMilliseconds) < 1
-        }) else {
-            return .result()
+        })
+        let elapsedSeconds = activity?.content.state.elapsedSeconds ?? 0
+        if let activity {
+            await activity.end(nil, dismissalPolicy: .immediate)
         }
 
-        let elapsedSeconds = activity.content.state.elapsedSeconds
-        await activity.end(nil, dismissalPolicy: .immediate)
-
-        guard let url = studyTimerURL(action: "save", subject: subject,
-                                      startedAtMilliseconds: startedAtMilliseconds,
-                                      elapsedSeconds: elapsedSeconds) else {
-            return .result()
-        }
+        let url = studyTimerURL(action: "save", subject: subject,
+                                startedAtMilliseconds: startedAtMilliseconds,
+                                elapsedSeconds: elapsedSeconds)
         return .result(opensIntent: OpenURLIntent(url))
     }
 }

@@ -88,7 +88,7 @@ struct StudyWebView: UIViewRepresentable {
 
         func handleControlURL(_ url: URL) {
             guard url.scheme == "studymoney", url.host == "timer",
-                  ["/pause", "/resume", "/save"].contains(url.path),
+                  ["/pause", "/resume", "/stop", "/save"].contains(url.path),
                   url != lastControlURL else { return }
             lastControlURL = url
             guard let webView, webView.url?.host == StudyWebView.siteHost, !webView.isLoading else {
@@ -117,6 +117,7 @@ struct StudyWebView: UIViewRepresentable {
             switch url.path {
             case "/pause": eventName = "FORMStudyTimerPauseRequested"
             case "/resume": eventName = "FORMStudyTimerResumeRequested"
+            case "/stop": eventName = "FORMStudyTimerStopRequested"
             case "/save": eventName = "FORMStudyTimerSaveRequested"
             default: return
             }

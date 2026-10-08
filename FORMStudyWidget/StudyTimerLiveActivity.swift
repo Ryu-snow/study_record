@@ -18,8 +18,10 @@ struct StudyTimerLiveActivity: Widget {
                         .foregroundStyle(.orange)
                         .frame(width: 54, height: 54)
                 }
-                .buttonStyle(.plain)
-                .modifier(InteractiveCircleGlass(tint: .orange, fallbackOpacity: 0.18))
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.circle)
+                .tint(.orange)
+                .frame(width: 54, height: 54)
                 .accessibilityLabel(context.state.isRunning ? "停止" : "再開")
 
                 Button(intent: SaveStudyTimerIntent(
@@ -31,8 +33,10 @@ struct StudyTimerLiveActivity: Widget {
                         .foregroundStyle(.white)
                         .frame(width: 54, height: 54)
                 }
-                .buttonStyle(.plain)
-                .modifier(InteractiveCircleGlass(tint: .white, fallbackOpacity: 0.15))
+                .buttonStyle(.bordered)
+                .buttonBorderShape(.circle)
+                .tint(.white)
+                .frame(width: 54, height: 54)
                 .accessibilityLabel("停止して記録を保存")
 
                 Spacer(minLength: 4)
@@ -109,20 +113,6 @@ struct StudyTimerLiveActivity: Widget {
     private func elapsedLabel(_ seconds: Double) -> String {
         let total = max(0, Int(seconds))
         return String(format: "%02d:%02d:%02d", total / 3_600, (total / 60) % 60, total % 60)
-    }
-}
-
-private struct InteractiveCircleGlass: ViewModifier {
-    let tint: Color
-    let fallbackOpacity: Double
-
-    @ViewBuilder
-    func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
-            content.glassEffect(.regular.tint(tint).interactive(), in: Circle())
-        } else {
-            content.background(tint.opacity(fallbackOpacity), in: Circle())
-        }
     }
 }
 

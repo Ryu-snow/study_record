@@ -61,6 +61,29 @@ struct ToggleStudyTimerIntent: LiveActivityIntent {
 }
 
 @MainActor
+struct StopStudyTimerIntent: LiveActivityIntent {
+    static var title: LocalizedStringResource = "学習タイマーを停止"
+    static var description = IntentDescription("アプリを開いてタイマーを停止し、学習記録を保存します。")
+
+    @Parameter(title: "科目") var subject: String
+    @Parameter(title: "開始時刻") var startedAtMilliseconds: Double
+
+    init() {}
+
+    init(subject: String, startedAtMilliseconds: Double) {
+        self.subject = subject
+        self.startedAtMilliseconds = startedAtMilliseconds
+    }
+
+    func perform() async throws -> some IntentResult {
+        let url = studyTimerURL(action: "stop",
+                                subject: subject,
+                                startedAtMilliseconds: startedAtMilliseconds)
+        return .result(opensIntent: OpenURLIntent(url))
+    }
+}
+
+@MainActor
 struct SaveStudyTimerIntent: LiveActivityIntent {
     static var title: LocalizedStringResource = "学習記録を保存"
     static var description = IntentDescription("学習記録をサイトへ保存し、Live Activity を終了します。")

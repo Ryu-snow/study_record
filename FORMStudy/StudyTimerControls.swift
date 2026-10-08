@@ -19,7 +19,7 @@ private func studyTimerURL(action: String, subject: String, startedAtMillisecond
 }
 
 @MainActor
-struct ToggleStudyTimerIntent: AppIntent {
+struct ToggleStudyTimerIntent: LiveActivityIntent {
     static var title: LocalizedStringResource = "学習タイマーを一時停止／再開"
     static var description = IntentDescription("Live Activity の学習時間を一時停止または再開します。")
 
@@ -61,7 +61,7 @@ struct ToggleStudyTimerIntent: AppIntent {
 }
 
 @MainActor
-struct SaveStudyTimerIntent: AppIntent {
+struct SaveStudyTimerIntent: LiveActivityIntent {
     static var title: LocalizedStringResource = "学習記録を保存"
     static var description = IntentDescription("学習記録をサイトへ保存し、Live Activity を終了します。")
 

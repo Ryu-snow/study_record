@@ -18,6 +18,7 @@ struct FORMStudyApp: App {
                     Group {
                         if selectedTab == .home {
                             StudyWebView(page: "", controlURL: nil)
+                                .ignoresSafeArea(.container, edges: .all)
                         } else {
                             Color.white
                         }
@@ -28,6 +29,7 @@ struct FORMStudyApp: App {
                     Group {
                         if selectedTab == .focus {
                             StudyWebView(page: "focus", controlURL: controlURL)
+                                .ignoresSafeArea(.container, edges: .all)
                         } else {
                             Color.white
                         }
@@ -38,6 +40,7 @@ struct FORMStudyApp: App {
                     Group {
                         if selectedTab == .history {
                             StudyWebView(page: "history", controlURL: nil)
+                                .ignoresSafeArea(.container, edges: .all)
                         } else {
                             Color.white
                         }

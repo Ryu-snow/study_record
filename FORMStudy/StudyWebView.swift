@@ -8,6 +8,7 @@ import WebKit
 @MainActor
 struct StudyWebView: UIViewRepresentable {
     static let siteHost = "study-form-ryu.ryukawasaki1023.chatgpt.site"
+    var page: String
     var controlURL: URL?
 
     func makeCoordinator() -> Coordinator { Coordinator() }
@@ -16,6 +17,11 @@ struct StudyWebView: UIViewRepresentable {
         let configuration = WKWebViewConfiguration()
         // The default data store retains website cookies and local storage across launches.
         configuration.websiteDataStore = .default()
+        configuration.userContentController.addUserScript(WKUserScript(
+            source: "document.documentElement.classList.add('native-shell')",
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: true
+        ))
         configuration.userContentController.add(context.coordinator, name: "studyTimer")
 
         let webView = WKWebView(frame: .zero, configuration: configuration)
@@ -27,7 +33,8 @@ struct StudyWebView: UIViewRepresentable {
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
         webView.allowsBackForwardNavigationGestures = true
-        webView.load(URLRequest(url: URL(string: "https://\(Self.siteHost)")!))
+        let path = page.isEmpty ? "" : "/\(page)"
+        webView.load(URLRequest(url: URL(string: "https://\(Self.siteHost)\(path)")!))
         return webView
     }
 

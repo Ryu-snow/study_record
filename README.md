@@ -21,7 +21,13 @@ Live Activities must be enabled in iOS Settings. They are displayed only while t
 
 - `FORMStudy/`: SwiftUI app and site `WKWebView` bridge.
 - `FORMStudyWidget/`: Lock Screen and Dynamic Island Live Activity UI.
-- `StudyTimerAttributes.swift` is included in both targets.
+- `FORMStudy/StudyTimerAttributes.swift` is included in both targets.
+- `web/`: reserved for the existing website source after the owner exports it; no web source is in this repository yet.
+- `docs/architecture.md`: shared iOS/web data boundary and three-tab integration constraints.
+- `docs/FORM_CODEX_HANDOFF.md`: the supplied product requirements, recorded as a checklist.
+- `AGENTS.md`: repository-wide change and data-protection guidance.
+
+GitHub `main` is the shared source of truth for application source, specs, and setup instructions. Do not commit deployed-site data, real study records, credentials, or signing keys. The exact Web export steps and required files are in [`web/README.md`](web/README.md).
 
 ## Updated device setup
 

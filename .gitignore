@@ -2,3 +2,23 @@ build/
 *.xcuserstate
 xcuserdata/
 .DS_Store
+
+# Web application dependencies and generated output (when source is integrated)
+node_modules/
+.next/
+out/
+dist/
+coverage/
+
+# Local configuration, databases, credentials, and user data
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite3
+*.db
+.wrangler/
+.dev.vars
+*.pem
+*.p12
+*.mobileprovision

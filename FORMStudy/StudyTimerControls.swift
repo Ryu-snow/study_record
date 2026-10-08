@@ -39,23 +39,8 @@ struct ToggleStudyTimerIntent: LiveActivityIntent {
         let url = studyTimerURL(action: shouldRun ? "resume" : "pause",
                                 subject: subject,
                                 startedAtMilliseconds: startedAtMilliseconds)
-        guard let activity = Activity<StudyTimerAttributes>.activities.first(where: {
-            $0.attributes.subject == subject &&
-            abs($0.content.state.startedAtMilliseconds - startedAtMilliseconds) < 1
-        }) else {
-            return .result(opensIntent: OpenURLIntent(url))
-        }
-
-        var state = activity.content.state
-        if shouldRun && !state.isRunning {
-            state.isRunning = true
-            state.resumedAtMilliseconds = Date().timeIntervalSince1970 * 1_000
-        } else if !shouldRun && state.isRunning {
-            state.accumulatedSeconds = state.elapsedSeconds
-            state.isRunning = false
-            state.resumedAtMilliseconds = nil
-        }
-        await activity.update(ActivityContent(state: state, staleDate: nil))
+        // The website owns the timer state. Let its pause/resume request update the
+        // database first; the WebView bridge mirrors the confirmed state back to ActivityKit.
         return .result(opensIntent: OpenURLIntent(url))
     }
 }

@@ -1,8 +1,10 @@
-# FORM Study iPhone companion
+# Study Money iPhone app
 
 This Xcode project hosts the existing study site in a `WKWebView`. When the site's study timer starts, the web page sends the subject and its start timestamp to the native app. The app starts one Live Activity; stopping the timer ends it. The Live Activity shows elapsed study time in the Dynamic Island and on the Lock Screen.
 
 The existing timer is a stopwatch, so the Live Activity displays elapsed time (time studied), not a countdown to a preset end time.
+
+The home screen app name is **Study Money**. Its app icon uses the supplied glass piggy-bank image. The WKWebView fills the screen beneath the iOS status and home-indicator regions so the site's page background continues to the display edges.
 
 ## Finish in Xcode
 

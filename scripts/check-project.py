@@ -64,7 +64,9 @@ def walk(group_id, base):
             walk(child_id, base)
         elif child.get('sourceTree') == '<group>':
             paths[child_id] = base / child['path']
-            assert paths[child_id].is_file(), paths[child_id]
+            assert paths[child_id].exists(), paths[child_id]
+            if paths[child_id].is_dir():
+                assert paths[child_id].name.endswith('.xcassets'), paths[child_id]
 
 
 walk(main['mainGroup'], root)
@@ -80,6 +82,7 @@ for name, target in targets.items():
         teams.add(settings['DEVELOPMENT_TEAM'])
         info = plistlib.loads((root / settings['INFOPLIST_FILE']).read_bytes())
         if name == 'FORMStudy':
+            assert settings['ASSETCATALOG_COMPILER_APPICON_NAME'] == 'AppIcon'
             assert info['NSSupportsLiveActivities'] is True
         else:
             assert settings['APPLICATION_EXTENSION_API_ONLY'] == 'YES'

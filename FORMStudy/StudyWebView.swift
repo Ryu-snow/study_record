@@ -18,6 +18,10 @@ struct StudyWebView: UIViewRepresentable {
         configuration.userContentController.add(context.coordinator, name: "studyTimer")
 
         let webView = WKWebView(frame: .zero, configuration: configuration)
+        webView.isOpaque = false
+        webView.backgroundColor = .white
+        webView.scrollView.backgroundColor = .white
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
         context.coordinator.observe(webView)
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator

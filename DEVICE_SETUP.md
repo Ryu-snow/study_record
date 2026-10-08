@@ -15,7 +15,7 @@ Team ID は添付プロジェクトの値を保持しています。あなたの
 
 ## Mac で必要な操作
 
-1. Xcode 16 以降と iOS プラットフォームをインストールし、Xcode を一度起動して初期設定を完了します。`xcodebuild -version` が失敗する場合は、Xcode の Settings → Locations → Command Line Tools で使用する Xcode を選択してください。
+1. Xcode 26 以降と iOS プラットフォームをインストールし、Xcode を一度起動して初期設定を完了します。Liquid Glass は iOS 26 SDK が必要です。iOS 17 以降ではガラス効果なしの従来ボタン表示へ自動で切り替わります。`xcodebuild -version` が失敗する場合は、Xcode の Settings → Locations → Command Line Tools で使用するXcodeを選択してください。
 2. Xcode の Settings → Accounts から Apple Account にログインします。パスワード、証明書の秘密鍵などをチャットに送る必要はありません。
 3. `FORMStudy.xcodeproj` を開き、両ターゲットの Signing & Capabilities で Automatically manage signing と Team を確認します。`D9K33N34XD` が自分の Team でない場合は、両ターゲットを同じ自分の Team に変更してください。Bundle Identifier は上記の値を維持します。
 4. iOS 17 以降の iPhone を Mac に接続し、ロックを解除して「このコンピュータを信頼」を許可します。iPhone の 設定 → プライバシーとセキュリティ → デベロッパモードを有効化し、要求された再起動と確認を行います。

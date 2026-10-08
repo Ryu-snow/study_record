@@ -26,9 +26,9 @@ struct StudyTimerLiveActivity: Widget {
                             .font(.system(size: 19, weight: .bold))
                             .foregroundStyle(.orange)
                             .frame(width: 54, height: 54)
-                            .background(.orange.opacity(0.18), in: Circle())
                     }
                     .buttonStyle(.plain)
+                    .modifier(InteractiveCircleGlass(tint: .orange, fallbackOpacity: 0.18))
                     .accessibilityLabel(context.state.isRunning ? "一時停止" : "再開")
 
                     Button(intent: SaveStudyTimerIntent(
@@ -39,9 +39,9 @@ struct StudyTimerLiveActivity: Widget {
                             .font(.system(size: 19, weight: .semibold))
                             .foregroundStyle(.white)
                             .frame(width: 54, height: 54)
-                            .background(.white.opacity(0.15), in: Circle())
                     }
                     .buttonStyle(.plain)
+                    .modifier(InteractiveCircleGlass(tint: .white, fallbackOpacity: 0.15))
                     .accessibilityLabel("記録を保存して終了")
 
                     Spacer(minLength: 2)
@@ -81,12 +81,14 @@ struct StudyTimerLiveActivity: Widget {
                         )) {
                             Label(context.state.isRunning ? "一時停止" : "再開",
                                   systemImage: context.state.isRunning ? "pause.fill" : "play.fill")
+                                .modifier(InteractiveCapsuleGlass(tint: .white))
                         }
                         Button(intent: SaveStudyTimerIntent(
                             subject: context.attributes.subject,
                             startedAtMilliseconds: context.state.startedAtMilliseconds
                         )) {
                             Label("記録", systemImage: "bookmark.fill")
+                                .modifier(InteractiveCapsuleGlass(tint: .white))
                         }
                     }
                 }
@@ -117,6 +119,35 @@ struct StudyTimerLiveActivity: Widget {
     private func elapsedLabel(_ seconds: Double) -> String {
         let total = max(0, Int(seconds))
         return String(format: "%02d:%02d:%02d", total / 3_600, (total / 60) % 60, total % 60)
+    }
+}
+
+private struct InteractiveCircleGlass: ViewModifier {
+    let tint: Color
+    let fallbackOpacity: Double
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content.glassEffect(.regular.tint(tint).interactive(), in: Circle())
+        } else {
+            content.background(tint.opacity(fallbackOpacity), in: Circle())
+        }
+    }
+}
+
+private struct InteractiveCapsuleGlass: ViewModifier {
+    let tint: Color
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content.padding(.horizontal, 12).padding(.vertical, 8)
+                .glassEffect(.regular.tint(tint.opacity(0.16)).interactive(), in: Capsule())
+        } else {
+            content.padding(.horizontal, 12).padding(.vertical, 8)
+                .background(tint.opacity(0.12), in: Capsule())
+        }
     }
 }
 

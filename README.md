@@ -10,7 +10,7 @@ The Lock Screen Live Activity has pause/resume and save controls. The app passes
 
 ## Finish in Xcode
 
-1. Open `FORMStudy.xcodeproj` on a Mac with Xcode 16 or later.
+1. Open `FORMStudy.xcodeproj` on a Mac with Xcode 26 or later to build the iOS 26 Liquid Glass controls.
 2. Select the `FORMStudy` project, then keep the configured Bundle Identifiers and select the same Personal Team for both `FORMStudy` and `FORMStudyWidget` under **Signing & Capabilities**.
 3. Choose an iPhone simulator or connected iPhone and build/run the `FORMStudy` scheme.
 4. Sign in to the study site in the app if prompted. Start a timer from the page; the Live Activity should appear. Stop the timer to dismiss it.

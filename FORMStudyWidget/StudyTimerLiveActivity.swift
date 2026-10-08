@@ -14,14 +14,15 @@ struct StudyTimerLiveActivity: Widget {
                     shouldRun: !context.state.isRunning
                 )) {
                     Image(systemName: context.state.isRunning ? "pause.fill" : "play.fill")
-                        .font(.system(size: 19, weight: .bold))
-                        .foregroundStyle(.orange)
-                        .frame(width: 54, height: 54)
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundStyle(.white)
+                        .frame(width: 44, height: 44)
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.circle)
+                .controlSize(.small)
                 .tint(.orange)
-                .frame(width: 54, height: 54)
+                .frame(width: 44, height: 44)
                 .accessibilityLabel(context.state.isRunning ? "停止" : "再開")
 
                 Button(intent: SaveStudyTimerIntent(
@@ -29,25 +30,29 @@ struct StudyTimerLiveActivity: Widget {
                     startedAtMilliseconds: context.state.startedAtMilliseconds
                 )) {
                     Image(systemName: "bookmark.fill")
-                        .font(.system(size: 19, weight: .semibold))
+                        .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
-                        .frame(width: 54, height: 54)
+                        .frame(width: 44, height: 44)
                 }
                 .buttonStyle(.bordered)
                 .buttonBorderShape(.circle)
+                .controlSize(.small)
                 .tint(.white)
-                .frame(width: 54, height: 54)
+                .frame(width: 44, height: 44)
                 .accessibilityLabel("停止して記録を保存")
 
-                Spacer(minLength: 4)
+                Spacer(minLength: 8)
                 timerText(context.state)
-                    .font(.system(size: 42, weight: .regular, design: .rounded))
+                    .font(.system(size: 34, weight: .regular, design: .rounded))
                     .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                     .foregroundStyle(.orange)
             }
             .foregroundStyle(.white)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
             .activityBackgroundTint(.black)
             .activitySystemActionForegroundColor(.white)
         } dynamicIsland: { context in

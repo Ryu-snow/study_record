@@ -6,49 +6,52 @@ import WidgetKit
 struct StudyTimerLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: StudyTimerAttributes.self) { context in
-            VStack(alignment: .leading, spacing: 2) {
+            HStack(alignment: .lastTextBaseline, spacing: 10) {
                 Text(context.attributes.subject.japaneseName)
                     .font(.caption2.weight(.medium))
-                    .foregroundStyle(.white.opacity(0.72))
                     .lineLimit(1)
 
                 timerText(context.state)
-                    .font(.system(size: 36, weight: .regular, design: .rounded))
+                    .font(.system(size: 44, weight: .regular, design: .rounded))
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity, alignment: .center)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundStyle(.orange)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
             .activityBackgroundTint(.black)
-            .activitySystemActionForegroundColor(.white)
+            .activitySystemActionForegroundColor(.orange)
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     Text(context.attributes.subject.japaneseName)
                         .font(.caption2.weight(.medium))
+                        .foregroundStyle(.orange)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     timerText(context.state)
                         .monospacedDigit()
-                        .font(.system(.title3, design: .rounded, weight: .semibold))
+                        .font(.system(.title2, design: .rounded, weight: .semibold))
+                        .foregroundStyle(.orange)
                         .frame(maxWidth: .infinity)
                 }
             } compactLeading: {
                 Text(context.attributes.subject.japaneseName)
                     .font(.caption2)
+                    .foregroundStyle(.orange)
             } compactTrailing: {
                 timerText(context.state)
                     .monospacedDigit()
+                    .foregroundStyle(.orange)
                     .frame(maxWidth: 52)
             } minimal: {
                 Image(systemName: "book.closed.fill")
+                    .foregroundStyle(.orange)
                     .accessibilityLabel("\(context.attributes.subject.japaneseName)を学習中")
             }
-            .keylineTint(.white)
+            .keylineTint(.orange)
         }
     }
 

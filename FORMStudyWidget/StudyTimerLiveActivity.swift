@@ -7,22 +7,22 @@ import WidgetKit
 struct StudyTimerLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: StudyTimerAttributes.self) { context in
-            HStack(spacing: 14) {
+            HStack(spacing: 10) {
                 Button(intent: ToggleStudyTimerIntent(
                     subject: context.attributes.subject,
                     startedAtMilliseconds: context.state.startedAtMilliseconds,
                     shouldRun: !context.state.isRunning
                 )) {
                     Image(systemName: context.state.isRunning ? "pause.fill" : "play.fill")
-                        .font(.system(size: 16, weight: .bold))
+                        .font(.system(size: 14, weight: .bold))
                         .foregroundStyle(.white)
-                        .frame(width: 44, height: 44)
+                        .frame(width: 36, height: 36)
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.circle)
-                .controlSize(.small)
+                .controlSize(.mini)
                 .tint(.orange)
-                .frame(width: 44, height: 44)
+                .frame(width: 36, height: 36)
                 .accessibilityLabel(context.state.isRunning ? "停止" : "再開")
 
                 Button(intent: SaveStudyTimerIntent(
@@ -30,15 +30,15 @@ struct StudyTimerLiveActivity: Widget {
                     startedAtMilliseconds: context.state.startedAtMilliseconds
                 )) {
                     Image(systemName: "bookmark.fill")
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.white)
-                        .frame(width: 44, height: 44)
+                        .frame(width: 36, height: 36)
                 }
                 .buttonStyle(.bordered)
                 .buttonBorderShape(.circle)
-                .controlSize(.small)
+                .controlSize(.mini)
                 .tint(.white)
-                .frame(width: 44, height: 44)
+                .frame(width: 36, height: 36)
                 .accessibilityLabel("停止して記録を保存")
 
                 Spacer(minLength: 8)
@@ -51,8 +51,8 @@ struct StudyTimerLiveActivity: Widget {
                     .foregroundStyle(.orange)
             }
             .foregroundStyle(.white)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
             .activityBackgroundTint(.black)
             .activitySystemActionForegroundColor(.white)
         } dynamicIsland: { context in

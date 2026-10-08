@@ -9,7 +9,7 @@
 
 Team ID は添付プロジェクトの値を保持しています。あなたの Apple Account がこの Team を利用できるか、証明書やプロビジョニングプロファイルが有効かは、Mac での署名時に確認が必要です。
 
-アプリの `NSSupportsLiveActivities` は有効です。`StudyTimerAttributes.swift` は両ターゲットの Sources に登録され、アプリはウィジェットへの依存と Embed App Extensions を持っています。共有 FORMStudy スキームで両方をビルドします。最低対応 OS は iOS 17.0 です。
+アプリの `NSSupportsLiveActivities` は有効です。`StudyTimerAttributes.swift` は両ターゲットの Sources に登録され、アプリはウィジェットへの依存と Embed App Extensions を持っています。共有 FORMStudy スキームで両方をビルドします。最低対応 OS は iOS 18.0 です。
 
 このクラウド環境は Linux で、Xcode・iOS SDK がありません。実際のコンパイル、署名、端末での動作は未検証です。添付ファイルの再構成と plist / scheme XML の解析を実施しました。
 
@@ -18,7 +18,7 @@ Team ID は添付プロジェクトの値を保持しています。あなたの
 1. Xcode 16 以降と iOS プラットフォームをインストールし、Xcode を一度起動して初期設定を完了します。`xcodebuild -version` が失敗する場合は、Xcode の Settings → Locations → Command Line Tools で使用する Xcode を選択してください。
 2. Xcode の Settings → Accounts から Apple Account にログインします。パスワード、証明書の秘密鍵などをチャットに送る必要はありません。
 3. `FORMStudy.xcodeproj` を開き、両ターゲットの Signing & Capabilities で Automatically manage signing と Team を確認します。`D9K33N34XD` が自分の Team でない場合は、両ターゲットを同じ自分の Team に変更してください。Bundle Identifier は上記の値を維持します。
-4. iOS 17 以降の iPhone を Mac に接続し、ロックを解除して「このコンピュータを信頼」を許可します。iPhone の 設定 → プライバシーとセキュリティ → デベロッパモードを有効化し、要求された再起動と確認を行います。
+4. iOS 18 以降の iPhone を Mac に接続し、ロックを解除して「このコンピュータを信頼」を許可します。iPhone の 設定 → プライバシーとセキュリティ → デベロッパモードを有効化し、要求された再起動と確認を行います。
 
 ## xcodebuild と署名検証
 

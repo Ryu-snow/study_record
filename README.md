@@ -6,6 +6,8 @@ The existing timer is a stopwatch, so the Live Activity displays elapsed time (t
 
 The home screen app name is **Study Money**. Its app icon uses the supplied glass piggy-bank image. The WKWebView fills the screen beneath the iOS status and home-indicator regions so the site's page background continues to the display edges.
 
+The Lock Screen Live Activity has pause/resume and save controls. The app passes these actions to the website as `FORMStudyTimerPauseRequested`, `FORMStudyTimerResumeRequested`, and `FORMStudyTimerSaveRequested` events and opens the app when a control is tapped. The website must handle these events and persist the save request; its source is not part of this repository, so website-side saving still needs integration and device verification.
+
 ## Finish in Xcode
 
 1. Open `FORMStudy.xcodeproj` on a Mac with Xcode 16 or later.

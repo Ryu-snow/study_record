@@ -1,4 +1,5 @@
 import ActivityKit
+import AppIntents
 import SwiftUI
 import WidgetKit
 
@@ -6,27 +7,54 @@ import WidgetKit
 struct StudyTimerLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: StudyTimerAttributes.self) { context in
-            HStack(spacing: 14) {
-                Image(systemName: "book.closed.fill")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.9))
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("\(context.attributes.subject.japaneseName)を学習中")
+            VStack(spacing: 12) {
+                HStack {
+                    Label("\(context.attributes.subject.japaneseName)を学習中", systemImage: "book.closed.fill")
                         .font(.headline)
-                        .foregroundStyle(.white)
-                    Text("集中タイマー")
-                        .font(.caption)
-                        .foregroundStyle(.white.opacity(0.7))
+                    Spacer()
+                    Text(context.state.isRunning ? "学習中" : "一時停止")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(context.state.isRunning ? .green : .orange)
                 }
-                Spacer(minLength: 8)
-                Text(context.state.startedAt, style: .timer)
-                    .font(.system(.title3, design: .rounded, weight: .semibold))
-                    .monospacedDigit()
-                    .foregroundStyle(.white)
+                HStack(spacing: 14) {
+                    Button(intent: ToggleStudyTimerIntent(
+                        subject: context.attributes.subject,
+                        startedAtMilliseconds: context.state.startedAtMilliseconds,
+                        shouldRun: !context.state.isRunning
+                    )) {
+                        Image(systemName: context.state.isRunning ? "pause.fill" : "play.fill")
+                            .font(.system(size: 19, weight: .bold))
+                            .foregroundStyle(.orange)
+                            .frame(width: 54, height: 54)
+                            .background(.orange.opacity(0.18), in: Circle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(context.state.isRunning ? "一時停止" : "再開")
+
+                    Button(intent: SaveStudyTimerIntent(
+                        subject: context.attributes.subject,
+                        startedAtMilliseconds: context.state.startedAtMilliseconds
+                    )) {
+                        Image(systemName: "bookmark.fill")
+                            .font(.system(size: 19, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .frame(width: 54, height: 54)
+                            .background(.white.opacity(0.15), in: Circle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("記録を保存して終了")
+
+                    Spacer(minLength: 2)
+                    timerText(context.state)
+                        .font(.system(size: 36, weight: .regular, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(.orange)
+                }
             }
-            .padding(.horizontal, 18)
-            .padding(.vertical, 14)
-            .activityBackgroundTint(Color(red: 0.14, green: 0.14, blue: 0.15))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .activityBackgroundTint(.black)
             .activitySystemActionForegroundColor(.white)
         } dynamicIsland: { context in
             DynamicIsland {
@@ -41,16 +69,32 @@ struct StudyTimerLiveActivity: Widget {
                     HStack {
                         Text("経過時間")
                         Spacer()
-                        Text(context.state.startedAt, style: .timer)
+                        timerText(context.state)
                             .monospacedDigit()
                             .font(.system(.title3, design: .rounded, weight: .semibold))
+                    }
+                    HStack(spacing: 22) {
+                        Button(intent: ToggleStudyTimerIntent(
+                            subject: context.attributes.subject,
+                            startedAtMilliseconds: context.state.startedAtMilliseconds,
+                            shouldRun: !context.state.isRunning
+                        )) {
+                            Label(context.state.isRunning ? "一時停止" : "再開",
+                                  systemImage: context.state.isRunning ? "pause.fill" : "play.fill")
+                        }
+                        Button(intent: SaveStudyTimerIntent(
+                            subject: context.attributes.subject,
+                            startedAtMilliseconds: context.state.startedAtMilliseconds
+                        )) {
+                            Label("記録", systemImage: "bookmark.fill")
+                        }
                     }
                 }
             } compactLeading: {
                 Text(context.attributes.subject.japaneseName)
                     .font(.caption2)
             } compactTrailing: {
-                Text(context.state.startedAt, style: .timer)
+                timerText(context.state)
                     .monospacedDigit()
                     .frame(maxWidth: 52)
             } minimal: {
@@ -59,6 +103,20 @@ struct StudyTimerLiveActivity: Widget {
             }
             .keylineTint(.white)
         }
+    }
+
+    @ViewBuilder
+    private func timerText(_ state: StudyTimerAttributes.ContentState) -> some View {
+        if state.isRunning {
+            Text(state.timerReferenceDate, style: .timer)
+        } else {
+            Text(elapsedLabel(state.elapsedSeconds))
+        }
+    }
+
+    private func elapsedLabel(_ seconds: Double) -> String {
+        let total = max(0, Int(seconds))
+        return String(format: "%02d:%02d:%02d", total / 3_600, (total / 60) % 60, total % 60)
     }
 }
 

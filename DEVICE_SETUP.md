@@ -67,6 +67,18 @@ window.addEventListener('FORMStudyTimerStateRequested', publishCurrentStudyTimer
 
 このサイト側の状態同期が未実装なら、アプリ起動時の復元は未完成です。ネイティブ側の変更だけで復元済みとは扱えません。
 
+## Live Activity の操作ボタンとサイト保存連携
+
+ロック画面と Dynamic Island の展開表示には一時停止／再開ボタンと記録ボタンがあります。一時停止は Activity の経過時間を固定し、再開は一時停止後の時間を加算します。ボタン操作は `studymoney://timer/pause`、`resume`、`save` の URL でアプリを開き、WebView上に次のイベントを発行します。
+
+- `FORMStudyTimerPauseRequested`
+- `FORMStudyTimerResumeRequested`
+- `FORMStudyTimerSaveRequested`
+
+イベントの `detail` には `subject` と `startedAt`（Unix epoch のミリ秒）が入り、保存時には `elapsedSeconds`（一時停止分を除いた秒数）も入ります。サイトは pause／resume に応じて自身のタイマーも止め／再開し、必要に応じて `studyTimer` ハンドラへ `pause`／`resume` を通知してください。保存イベントでは `elapsedSeconds` を用いて学習記録を保存し、保存後に `studyTimer` へ `{ action: "stop" }` を送ってサイト側タイマーも終了させてください。
+
+このリポジトリにはサイトのフロントエンド／保存APIのソースが含まれていません。そのため、アプリは保存要求を渡せますが、データベースへの実保存とサイト側カウンターの同期はサイト側リスナーを追加して検証する必要があります。現在サイトはこの環境から HTTP 403 で取得できず、保存の成否は未確認です。
+
 ## 実機の受け入れ確認
 
 - ログイン後にアプリを終了・再起動し、セッションが維持される。
@@ -76,6 +88,8 @@ window.addEventListener('FORMStudyTimerStateRequested', publishCurrentStudyTimer
 - 停止後にロック画面から Activity が消える。
 - タイマー実行中にアプリを終了・再起動し、現在状態の送信後も元の開始時刻から計時する。
 - アプリを閉じている間にサイトで停止し、再起動後の stop 送信で古い Activity が終了する。
+- Live Activity の一時停止／再開でActivityとWebサイト両方の経過時間が止まり、続きから再開する。
+- 記録ボタンからサイトに科目、開始時刻、一時停止を除いた経過秒数が保存され、保存後にActivityとサイトのタイマーが終了する。
 - Live Activities を無効にしても、サイトのタイマーが使える。再度有効にして復帰した際、状態送信後に開始する。
 
 Dynamic Island は対応機種のみです。ActivityKit のシステム制限により Live Activity は無期限に表示し続けられません。通常、アクティブ表示は最大 8 時間です。

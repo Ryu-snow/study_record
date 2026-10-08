@@ -81,10 +81,8 @@ struct SaveStudyTimerIntent: LiveActivityIntent {
             abs($0.content.state.startedAtMilliseconds - startedAtMilliseconds) < 1
         })
         let elapsedSeconds = activity?.content.state.elapsedSeconds ?? 0
-        if let activity {
-            await activity.end(nil, dismissalPolicy: .immediate)
-        }
-
+        // Keep the Live Activity visible until the website confirms and reflects the save.
+        // The app URL below lets the authenticated WKWebView submit the record to /api/study.
         let url = studyTimerURL(action: "save", subject: subject,
                                 startedAtMilliseconds: startedAtMilliseconds,
                                 elapsedSeconds: elapsedSeconds)

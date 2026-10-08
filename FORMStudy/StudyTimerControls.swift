@@ -61,29 +61,6 @@ struct ToggleStudyTimerIntent: LiveActivityIntent {
 }
 
 @MainActor
-struct StopStudyTimerIntent: LiveActivityIntent {
-    static var title: LocalizedStringResource = "学習タイマーを停止"
-    static var description = IntentDescription("アプリを開いてタイマーを停止し、学習記録を保存します。")
-
-    @Parameter(title: "科目") var subject: String
-    @Parameter(title: "開始時刻") var startedAtMilliseconds: Double
-
-    init() {}
-
-    init(subject: String, startedAtMilliseconds: Double) {
-        self.subject = subject
-        self.startedAtMilliseconds = startedAtMilliseconds
-    }
-
-    func perform() async throws -> some IntentResult {
-        let url = studyTimerURL(action: "stop",
-                                subject: subject,
-                                startedAtMilliseconds: startedAtMilliseconds)
-        return .result(opensIntent: OpenURLIntent(url))
-    }
-}
-
-@MainActor
 struct SaveStudyTimerIntent: LiveActivityIntent {
     static var title: LocalizedStringResource = "学習記録を保存"
     static var description = IntentDescription("学習記録をサイトへ保存し、Live Activity を終了します。")
@@ -99,16 +76,11 @@ struct SaveStudyTimerIntent: LiveActivityIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        let activity = Activity<StudyTimerAttributes>.activities.first(where: {
-            $0.attributes.subject == subject &&
-            abs($0.content.state.startedAtMilliseconds - startedAtMilliseconds) < 1
-        })
-        let elapsedSeconds = activity?.content.state.elapsedSeconds ?? 0
-        // Keep the Live Activity visible until the website confirms and reflects the save.
-        // The app URL below lets the authenticated WKWebView submit the record to /api/study.
-        let url = studyTimerURL(action: "save", subject: subject,
-                                startedAtMilliseconds: startedAtMilliseconds,
-                                elapsedSeconds: elapsedSeconds)
+        // Use the same stop-and-save API action as the Focus screen.
+        // The Live Activity ends after the website confirms the save and clears its timer.
+        let url = studyTimerURL(action: "stop",
+                                subject: subject,
+                                startedAtMilliseconds: startedAtMilliseconds)
         return .result(opensIntent: OpenURLIntent(url))
     }
 }
